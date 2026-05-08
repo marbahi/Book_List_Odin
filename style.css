@@ -20,5 +20,20 @@ button {
     border-radius: 10px;
     color: white;
     background-color: #467a61;
-    box-shadow: 1px 2px 5px #00000023;
+    box-shadow: 2px 2px 8px #00000020;
+}
+
+.card {
+    width: 80%;
+    height: 200px;
+    border-radius: 10px;
+}
+
+.card.yes {
+    background-color: #467a61;
+    color: white;
+}
+
+.card.no {
+    background-color: gray;
 }

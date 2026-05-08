@@ -12,7 +12,31 @@
 </head>
 <body>
     <h1>You Can Store our Book Here!</h1>
-    <button type="submit">+ Add New Book</button>
+    <button type="button" id="open">+ Add New Book</button>
     <div class="list"></div>
+
+    <dialog class="modal">
+        <form>
+            <label for="author_name">Author Name:</label>
+            <input type="text" id="author_name" name="Author_name">
+            <label for="book_name">Book Name:</label>
+            <input type="text" id="book_name" name="Book_name">
+            <label for="numberofpages">Number of Pages:</label>
+            <input type="text" id="numberofpages" name="Numberofpages">
+            <h3>Have You Read?</h3>
+            <div>
+                <input type="radio" id="yes" name="read_status" value="yes">
+                <label for="yes">Yes</label>
+            </div>
+            <div>
+                <input type="radio" id="no" name="read_status" value="no">
+                <label for="yes">No</label>
+            </div>
+            <div class="close_button">
+                <button type="submit" id="submitBook">Add to Library</button>
+                <button type="button" id="close">Cancel</button>
+            </div>
+        </form>
+    </dialog>
 </body>
 </html>
