@@ -1,20 +1,16 @@
 const myLibrary = [];
 
 const list = document.querySelector(".list");
-const book = document.createElement("div");
 const modal = document.querySelector(".modal");
 
 const getAuthor = document.querySelector("#author_name");
 const getBookName = document.querySelector("#book_name");
 const getNOP = document.querySelector("#numberofpages");
-const getReadStatus = document.querySelector("#author_name");
 
-const titleEl = document.createElement("h2");
-const authorEl = document.createElement("p");
-const nopEl = document.createElement("p");
-const read_statusEl = document.createElement("p");
-const remove = document.createElement("button");
-const readBook = document.createElement("button");
+
+
+
+
 
 function Book(id, author, title, nop, read_status) {
   this.id = id;
@@ -25,53 +21,78 @@ function Book(id, author, title, nop, read_status) {
 }
 
 function addBookToLibrary(id, author, title, nop, read_status) {
-  this.id = id;
-  this.author = author;
-  this.title = title;
-  this.nop = nop;
-  this.read_status = read_status;
+  const newBook = new Book(id, author, title, nop, read_status);
   
-  myLibrary.push({id: id, author: author, title: title, nop: nop, read_status: read_status});
+  myLibrary.push(newBook);
 
-  makeBook();
+  renderBook();
 }
 
-addBookToLibrary.prototype = Book.prototype;
+function createBookCard(bookData) {
+  const book = document.createElement("div"); 
+  book.classList.add("card");
+  book.id = bookData.id;
 
-function makeBook() {
-  let manyBook = myLibrary.length;
+  const titleEl = document.createElement("h2");
+  titleEl.textContent = bookData.title;
+  titleEl.classList.add("title");
+  book.appendChild(titleEl);
 
-  for(let i = 0; i < manyBook; i++){
-    
-    book.classList.add("card");
-    book.id = myLibrary[i].id;
-    book.appendChild(titleEl);
-    titleEl.textContent = myLibrary[i].title;
-    titleEl.classList.add("title");
-    book.appendChild(authorEl);
-    authorEl.textContent = "By " + myLibrary[i].author;
-    authorEl.classList.add("author");
-    book.appendChild(nopEl);
-    nopEl.textContent = myLibrary[i].nop + " Pages";
-    nopEl.classList.add("pages");
-    if(myLibrary[i].read_status == "yes") {
-      book.classList.add("yes");
-    } else {
-      book.classList.add("no");
-      book.appendChild(readBook);
-      readBook.textContent = "I have Read it!"
-      readBook.classList.add("readBtn");
-    }
-    book.appendChild(remove);
-    remove.textContent = "Remove Book";
-    remove.classList.add("removeBtn");
+  const authorEl = document.createElement("p");
+  authorEl.textContent = "By " + bookData.author;
+  authorEl.classList.add("author");
+  book.appendChild(authorEl);
 
-    list.appendChild(book);
+  const nopEl = document.createElement("p");
+  nopEl.textContent = bookData.nop + " Pages";
+  nopEl.classList.add("pages");
+  book.appendChild(nopEl);
+
+  if(bookData.read_status == "yes") {
+    book.classList.add("yes");
+  } else {
+    book.classList.add("no");
+
+    const readBook = document.createElement("button");
+    readBook.textContent = "I have Read it!"
+    readBook.classList.add("readBtn");
+
+    readBook.addEventListener("click", () => {
+      const found = myLibrary.find(b => b.id === bookData.id);
+      if (found) {
+        found.read_status = "yes";
+        renderBook();
+      }
+    })
+
+    book.appendChild(readBook);
   }
+  const remove = document.createElement("button");
+  remove.textContent = "Remove Book";
+  remove.classList.add("removeBtn");
+    remove.addEventListener("click", () => {
+    let removed = myLibrary.findIndex(b => b.id === bookData.id);
+    if (removed !== -1) {
+      myLibrary.splice(removed, 1);
+      renderBook();
+    }
+  })
+  book.appendChild(remove);
+
+  return book;
+}
+
+function renderBook() {
+  list.innerHTML = "";
+  myLibrary.forEach(bookData => {
+    const card = createBookCard(bookData);
+    list.appendChild(card);
+  })
 }
 
 const openButton = document.querySelector("#open");
 openButton.addEventListener("click", () => {
+  document.querySelector(".modal form").reset();
   modal.showModal();
 })
 
@@ -92,6 +113,12 @@ const submitButton = document.querySelector("#submitBook");
 submitButton.addEventListener("click", (e) => {
   e.preventDefault();
 
+  const form = document.querySelector(".modal form");
+  if (!form.checkValidity()) {
+    form.reportValidity(); // munculkan pesan error bawaan browser
+    return;
+  }
+
   modal.close()
 
   let myID = crypto.randomUUID();
@@ -99,24 +126,3 @@ submitButton.addEventListener("click", (e) => {
   console.log(myID, getAuthor.value, getBookName.value, getNOP.value, findSelected());
   addBookToLibrary(myID, getAuthor.value, getBookName.value, getNOP.value, findSelected());
 })
-
-if (myLibrary.length > 0) {
-  const removeButton = document.querySelector(".removeBtn");
-  removeButton.addEventListener("click", () => {
-    let removed = myLibrary.id;
-
-    if (removed !== -1) {
-      myLibrary.splice(removed, 1);
-    }
-
-    makeBook();
-  })
-
-  const readButton = document.querySelector(".readBtn");
-  readButton.addEventListener("click", () => {
-    myLibrary.read_status = "";
-    myLibrary.read_status = "yes";
-    
-    makeBook();
-  })
-}

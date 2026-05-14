@@ -18,19 +18,19 @@
     <dialog class="modal">
         <form>
             <label for="author_name">Author Name:</label>
-            <input type="text" id="author_name" name="Author_name">
+            <input type="text" id="author_name" name="Author_name" required>
             <label for="book_name">Book Name:</label>
-            <input type="text" id="book_name" name="Book_name">
+            <input type="text" id="book_name" name="Book_name" required>
             <label for="numberofpages">Number of Pages:</label>
-            <input type="text" id="numberofpages" name="Numberofpages">
+            <input type="text" id="numberofpages" name="Numberofpages" required>
             <h3>Have You Read?</h3>
-            <div>
-                <input type="radio" id="yes" name="read_status" value="yes">
-                <label for="yes">Yes</label>
-            </div>
-            <div>
+            <div class="radio_group">
+                <input type="radio" id="yes" name="read_status" value="yes" required>
+                <label for="yes" class="radio_label">Yes</label>
+
                 <input type="radio" id="no" name="read_status" value="no">
-                <label for="yes">No</label>
+                <label for="no" class="radio_label">No</label>
+
             </div>
             <div class="close_button">
                 <button type="submit" id="submitBook">Add to Library</button>
