@@ -13,6 +13,8 @@ const titleEl = document.createElement("h2");
 const authorEl = document.createElement("p");
 const nopEl = document.createElement("p");
 const read_statusEl = document.createElement("p");
+const remove = document.createElement("button");
+const readBook = document.createElement("button");
 
 function Book(id, author, title, nop, read_status) {
   this.id = id;
@@ -45,15 +47,24 @@ function makeBook() {
     book.id = myLibrary[i].id;
     book.appendChild(titleEl);
     titleEl.textContent = myLibrary[i].title;
+    titleEl.classList.add("title");
     book.appendChild(authorEl);
-    authorEl.textContent = myLibrary[i].author;
+    authorEl.textContent = "By " + myLibrary[i].author;
+    authorEl.classList.add("author");
     book.appendChild(nopEl);
-    nopEl.textContent = myLibrary[i].nop;
+    nopEl.textContent = myLibrary[i].nop + " Pages";
+    nopEl.classList.add("pages");
     if(myLibrary[i].read_status == "yes") {
       book.classList.add("yes");
     } else {
       book.classList.add("no");
+      book.appendChild(readBook);
+      readBook.textContent = "I have Read it!"
+      readBook.classList.add("readBtn");
     }
+    book.appendChild(remove);
+    remove.textContent = "Remove Book";
+    remove.classList.add("removeBtn");
 
     list.appendChild(book);
   }
@@ -88,3 +99,24 @@ submitButton.addEventListener("click", (e) => {
   console.log(myID, getAuthor.value, getBookName.value, getNOP.value, findSelected());
   addBookToLibrary(myID, getAuthor.value, getBookName.value, getNOP.value, findSelected());
 })
+
+if (myLibrary.length > 0) {
+  const removeButton = document.querySelector(".removeBtn");
+  removeButton.addEventListener("click", () => {
+    let removed = myLibrary.id;
+
+    if (removed !== -1) {
+      myLibrary.splice(removed, 1);
+    }
+
+    makeBook();
+  })
+
+  const readButton = document.querySelector(".readBtn");
+  readButton.addEventListener("click", () => {
+    myLibrary.read_status = "";
+    myLibrary.read_status = "yes";
+    
+    makeBook();
+  })
+}
